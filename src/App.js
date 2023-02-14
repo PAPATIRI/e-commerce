@@ -1,9 +1,25 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/register',
+    element: <Register />
+  }
+]);
+
 function App() {
-  return (
-    <div className="flex flex-col bg-pink-300 p-16">
-      <p>hello react</p>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
