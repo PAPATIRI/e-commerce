@@ -10,13 +10,37 @@ const initialLoginState = {
   message: ''
 };
 
+export const registerUser = createAsyncThunk('user/registerUser', async (user, thunkAPI) => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/local/register`, {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      roleuser: user.roleuser
+    });
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const message = error.response.data.msg;
+      return thunkAPI.rejectWithValue(message);
+    } else if (error.request) {
+      const message = error.request.data.msg;
+      return thunkAPI.rejectWithValue(message);
+    } else if (error.message) {
+      const message = error.message.data.msg;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+});
+
 export const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAPI) => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/local`, {
       identifier: user.email,
       password: user.password
     });
-    localStorage.setItem('jwt', JSON.stringify(response.data.jwt));
+    localStorage.setItem('jwt', response.data.jwt);
 
     return response.data;
   } catch (error) {
@@ -86,6 +110,20 @@ export const authSlice = createSlice({
       state.userData = action.payload;
     });
     builder.addCase(getMe.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
+    /* register state */
+    builder.addCase(registerUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(registerUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.user = action.payload;
+    });
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.message = action.payload;

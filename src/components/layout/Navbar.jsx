@@ -11,7 +11,7 @@ const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const { userData, isError } = useSelector((state) => state.auth);
-  const jwt = JSON.parse(localStorage.getItem('jwt'));
+  const jwt = localStorage.getItem('jwt');
   const userProfile = JSON.parse(localStorage.getItem('user'));
 
   const navigate = useNavigate();
@@ -23,9 +23,6 @@ const Navbar = () => {
 
   useEffect(() => {
     dispatch(getMe(jwt));
-    if (userData) {
-      localStorage.setItem('user', JSON.stringify(userData));
-    }
   }, []);
 
   useEffect(() => {
@@ -33,6 +30,10 @@ const Navbar = () => {
       navigate('/login');
     }
   }, []);
+
+  if (userData) {
+    localStorage.setItem('user', JSON.stringify(userData));
+  }
 
   return (
     <div className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-center bg-slate-100 shadow">
