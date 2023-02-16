@@ -1,10 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { Gap } from '../../components';
 import FormLogin from './FormLogin';
 
 const Login = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="flex h-screen w-full items-center justify-center bg-blue-100">
       <div className="mx-[5%] flex h-[65%] items-center overflow-hidden rounded-lg bg-white shadow-lg lg:mx-[20%]">
@@ -18,7 +15,7 @@ const Login = () => {
         <div className="flex-1 p-4">
           <h1 className="text-2xl font-bold text-gray-800 md:text-4xl">Login</h1>
           <Gap height={40} />
-          <FormLogin onSubmit={() => navigate('/')} />
+          <FormLogin />
         </div>
       </div>
     </div>
